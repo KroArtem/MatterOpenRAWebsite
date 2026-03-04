@@ -36,7 +36,7 @@ function createChartConfig(datasets) {
           displayColors: true,
           callbacks: {
             label: function(context) {
-              return context.dataset.label + ': ' + context.parsed.y;
+              return context.dataset.label + ': ' + Math.round(context.parsed.y);
             }
           }
         }
