@@ -17,6 +17,8 @@ const graphOptions = {
   },
   xaxis: {
     mode: 'time',
+    timeformat: '%H:%M',
+    timezone: 'browser',
     tickColor: 'rgba(255, 255, 255, 0.05)',
     font: {
       color: 'rgba(255, 255, 255, 0.8)'
