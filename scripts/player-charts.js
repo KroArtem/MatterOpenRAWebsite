@@ -46,6 +46,7 @@ function createChartConfig(datasets) {
           type: 'time',
           time: {
             displayFormats: {
+              minute: 'HH:mm',
               hour: 'MMM d, HH:mm',
               day: 'MMM d'
             },
