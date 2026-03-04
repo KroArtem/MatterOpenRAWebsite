@@ -9,7 +9,12 @@
 .flot-chart {
   @include metalPanel();
   margin-top: 1rem;
-  height: auto !important;
+  height: 350px !important;
+  position: relative;
+}
+
+.flot-chart canvas {
+  max-height: 100%;
 }
 
 .flot-chart,
