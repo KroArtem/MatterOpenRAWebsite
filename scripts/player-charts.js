@@ -147,20 +147,17 @@ function createPlayerChart(containerId, rrd_file, rra_idx) {
 }
 
 // Load RRD file and create chart
-function loadChartCallback() {
-  if (this.readyState == 4) {
-    try {
-      const bf = new BinaryFile(this.responseText);
-      const rrd_file = new RRDFile(bf);
-      
-      // Create chart with RRA index 2 (30 minute average, last 2 weeks)
-      createPlayerChart('players', rrd_file, 2);
-    } catch (error) {
-      console.error('Error parsing RRD file:', error);
-      const container = document.getElementById('players');
-      if (container) {
-        container.innerHTML = '<p style="color: rgba(255,255,255,0.8); padding: 1rem;">Error loading chart data.</p>';
-      }
+function loadChartCallback(bf) {
+  try {
+    const rrd_file = new RRDFile(bf);
+    
+    // Create chart with RRA index 2 (30 minute average, last 2 weeks)
+    createPlayerChart('players', rrd_file, 2);
+  } catch (error) {
+    console.error('Error parsing RRD file:', error);
+    const container = document.getElementById('players');
+    if (container) {
+      container.innerHTML = '<p style="color: rgba(255,255,255,0.8); padding: 1rem;">Error loading chart data.</p>';
     }
   }
 }
