@@ -48,7 +48,8 @@ function createChartConfig(datasets) {
             displayFormats: {
               hour: 'MMM d, HH:mm',
               day: 'MMM d'
-            }
+            },
+            tooltipFormat: 'MMM d, HH:mm'
           },
           grid: {
             color: 'rgba(255, 255, 255, 0.05)'
@@ -93,7 +94,7 @@ function rrdDataToChartJS(rrd_file, rra_idx) {
   for (let i = 0; i < flotObj.data.length; i++) {
     const series = flotObj.data[i];
     const chartData = series.data.map(point => ({
-      x: point[0],
+      x: Math.floor(point[0] / 60000) * 60000, // Round to nearest minute
       y: point[1]
     }));
 
