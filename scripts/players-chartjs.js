@@ -9,7 +9,18 @@ Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
 Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 
 // Helper function to create chart configuration
-function createChartConfig(datasets) {
+function createChartConfig(datasets, timeConfig = {}) {
+  const defaultTimeConfig = {
+    displayFormats: {
+      minute: 'HH:mm',
+      hour: 'MMM d, HH:mm',
+      day: 'MMM d',
+      week: 'MMM d',
+      month: 'MMM yyyy'
+    },
+    tooltipFormat: 'MMM d, HH:mm'
+  };
+  
   return {
     type: 'line',
     data: {
@@ -44,16 +55,7 @@ function createChartConfig(datasets) {
       scales: {
         x: {
           type: 'time',
-          time: {
-            displayFormats: {
-              minute: 'HH:mm',
-              hour: 'MMM d, HH:mm',
-              day: 'MMM d',
-              week: 'MMM d',
-              month: 'MMM yyyy'
-            },
-            tooltipFormat: 'MMM d, HH:mm'
-          },
+          time: Object.assign({}, defaultTimeConfig, timeConfig),
           grid: {
             color: 'rgba(255, 255, 255, 0.05)'
           },
@@ -132,7 +134,7 @@ function rrdDataToChartJS(rrd_file, rra_idx) {
 }
 
 // Function to create a chart in a container
-function createPlayerChart(containerId, rrd_file, rra_idx) {
+function createPlayerChart(containerId, rrd_file, rra_idx, timeConfig) {
   const container = document.getElementById(containerId);
   if (!container) {
     console.error('Container not found:', containerId);
@@ -145,7 +147,7 @@ function createPlayerChart(containerId, rrd_file, rra_idx) {
   
   try {
     const datasets = rrdDataToChartJS(rrd_file, rra_idx);
-    const config = createChartConfig(datasets);
+    const config = createChartConfig(datasets, timeConfig);
     new Chart(canvas, config);
   } catch (error) {
     console.error('Error creating chart:', error);
@@ -159,7 +161,15 @@ function loadChartsCallback(bf) {
     const rrd_file = new RRDFile(bf);
     
     // Create charts with different RRA indices for different time ranges
-    createPlayerChart('thirtyseconds', rrd_file, 0);  // 30 second average, last 5 hours
+    // For 5 hours chart, show 30-minute intervals
+    createPlayerChart('thirtyseconds', rrd_file, 0, {
+      unit: 'minute',
+      stepSize: 30,
+      displayFormats: {
+        minute: 'HH:mm'
+      }
+    });
+    
     createPlayerChart('fiveminutes', rrd_file, 1);     // 5 minute average, last 2 days
     createPlayerChart('halfanhour', rrd_file, 2);      // 30 minute average, last 2 weeks
     createPlayerChart('daily', rrd_file, 4);           // 1 day average, last 2 years
