@@ -30,7 +30,12 @@
   background: white;
   color: black;
   text-shadow: none;
-  font-size: $font-size-small;
+  font-size: 0.875rem;
   border-radius: 2px;
   padding: 0.25rem 0.5rem;
+}
+
+.flot-x-axis .flot-tick-label,
+.flot-y-axis .flot-tick-label {
+  color: rgba(255, 255, 255, 0.8) !important;
 }
