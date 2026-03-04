@@ -17,10 +17,16 @@ const graphOptions = {
   },
   xaxis: {
     mode: 'time',
-    color: 'rgba(255, 255, 255, 0.8)'
+    tickColor: 'rgba(255, 255, 255, 0.05)',
+    font: {
+      color: 'rgba(255, 255, 255, 0.8)'
+    }
   },
   yaxis: {
-    color: 'rgba(255, 255, 255, 0.8)'
+    tickColor: 'rgba(255, 255, 255, 0.05)',
+    font: {
+      color: 'rgba(255, 255, 255, 0.8)'
+    }
   },
   series: { stack: true }
 };
