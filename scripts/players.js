@@ -15,6 +15,13 @@ const graphOptions = {
     hoverable: true,
     margin: { left: 0, top: 0, right: 0, bottom: 0 }
   },
+  xaxis: {
+    mode: 'time',
+    color: 'rgba(255, 255, 255, 0.8)'
+  },
+  yaxis: {
+    color: 'rgba(255, 255, 255, 0.8)'
+  },
   series: { stack: true }
 };
 
