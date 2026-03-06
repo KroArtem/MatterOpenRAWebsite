@@ -470,13 +470,21 @@ ServerBrowser.prototype.requestServerList = function requestServerList () {
   const _this = this;
   this.requestingServerList = true;
   this.$refresh.prop('disabled', true);
-  $.getJSON('https://master.openra.net/games?protocol=2&type=json', function (gameResults) {
-    _this.$tooltipContainer.empty(); // just in case, to prevent unwanted popups
-    _this.requestingServerList = false;
-    _this.$refresh.prop('disabled', false);
-    _this.servers = ServerBrowser.processGameResults(gameResults);
-    _this.renderServerList();
-  });
+  $.getJSON('https://master.openra.net/games?protocol=2&type=json')
+    .done(function (gameResults) {
+      _this.$tooltipContainer.empty(); // just in case, to prevent unwanted popups
+      _this.servers = ServerBrowser.processGameResults(gameResults);
+      _this.renderServerList();
+    })
+    .fail(function () {
+      _this.$serversList.html(
+        '<tr><td colspan="5" class="text--centered" style="padding: 1em;">Unable to load the server list. Please try again later.</td></tr>'
+      );
+    })
+    .always(function () {
+      _this.requestingServerList = false;
+      _this.$refresh.prop('disabled', false);
+    });
 
   clearTimeout(this.requestServerListTimeoutId);
   this.requestServerListTimeoutId = setTimeout(function () {
@@ -485,9 +493,15 @@ ServerBrowser.prototype.requestServerList = function requestServerList () {
 }
 
 ServerBrowser.prototype.requestMapInfo = function requestMapInfo (hashId, callback) {
-  $.getJSON('https://resource.openra.net/map/hash/'+ hashId, function (mapResults) {
-    callback(mapResults[0]);
-  });
+  $.getJSON('https://resource.openra.net/map/hash/'+ hashId)
+    .done(function (mapResults) {
+      if (mapResults && mapResults.length) {
+        callback(mapResults[0]);
+      }
+    })
+    .fail(function () {
+      // Silently ignore map info failures; tooltip will show hash instead
+    });
 }
 
 ServerBrowser.prototype.setSortState = function setSortState (by) {
